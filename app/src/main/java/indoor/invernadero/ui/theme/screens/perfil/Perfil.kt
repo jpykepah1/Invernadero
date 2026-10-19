@@ -24,6 +24,8 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.edit
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.coil3.CoilImage
 import indoor.invernadero.ui.theme.extension.TextFieldView
@@ -52,6 +54,30 @@ fun Perfil(
     val nameState = remember { mutableStateOf(prefs.getString("name", defaultName) ?: defaultName) }
     val emailState = remember { mutableStateOf(prefs.getString("email", firebaseEmail) ?: firebaseEmail) }
     val locationState = remember { mutableStateOf(prefs.getString("location", "Valparaíso, Chile") ?: "Valparaíso, Chile") }
+
+    LaunchedEffect(currentUser?.uid) {
+        val uid = currentUser?.uid
+        if (uid != null) {
+            try {
+                FirebaseFirestore.getInstance().collection("users").document(uid)
+                    .get()
+                    .addOnSuccessListener { doc ->
+                        if (doc.exists()) {
+                            val remoteName = doc.getString("name")
+                            val remoteLocation = doc.getString("location")
+                            if (!remoteName.isNullOrEmpty()) {
+                                nameState.value = remoteName
+                                prefs.edit { putString("name", remoteName) }
+                            }
+                            if (!remoteLocation.isNullOrEmpty()) {
+                                locationState.value = remoteLocation
+                                prefs.edit { putString("location", remoteLocation) }
+                            }
+                        }
+                    }
+            } catch (_: Exception) {}
+        }
+    }
 
     val deviceStatusText = if (isConnectedVal) "ESP32-INDOOR-A1 · Estado: Conectado" else "ESP32-INDOOR-A1 · Estado: Desconectado"
     val deviceStatusColor = if (isConnectedVal) Color(0xFF4A724B) else Color(0xFF9A5100)
@@ -304,7 +330,24 @@ fun Perfil(
                             putString("email", emailState.value)
                             putString("location", locationState.value)
                         }
-                        Toast.makeText(context, "Perfil guardado exitosamente", Toast.LENGTH_SHORT).show()
+                        val uid = currentUser?.uid
+                        if (uid != null) {
+                            val profileData = mapOf(
+                                "name" to nameState.value,
+                                "email" to emailState.value,
+                                "location" to locationState.value
+                            )
+                            FirebaseFirestore.getInstance().collection("users").document(uid)
+                                .set(profileData, SetOptions.merge())
+                                .addOnSuccessListener {
+                                    Toast.makeText(context, "Perfil guardado en la nube", Toast.LENGTH_SHORT).show()
+                                }
+                                .addOnFailureListener {
+                                    Toast.makeText(context, "Perfil guardado localmente", Toast.LENGTH_SHORT).show()
+                                }
+                        } else {
+                            Toast.makeText(context, "Perfil guardado exitosamente", Toast.LENGTH_SHORT).show()
+                        }
                     }
                     .padding(vertical = 18.dp)
             ) {

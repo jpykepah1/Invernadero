@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.landscapist.coil3)
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
     implementation(libs.paho.mqtt)
     implementation(libs.gson)
     implementation(libs.play.services.auth)
