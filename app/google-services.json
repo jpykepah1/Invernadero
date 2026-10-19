@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "47657586079",
+    "project_id": "invernadero-f22f7",
+    "storage_bucket": "invernadero-f22f7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:47657586079:android:7e4f9a8acce47db7ba81aa",
+        "android_client_info": {
+          "package_name": "indoor.invernadero"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "47657586079-7kis3pl9j79j9r4373l96a84kkgg0i55.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "indoor.invernadero",
+            "certificate_hash": "06376290d1d050272a2c65004f71d7f00d93ed04"
+          }
+        },
+        {
+          "client_id": "47657586079-uo2rpfv7lrbjnianh7jojonne3fqcgbi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0rrehgs6vtVG0YuZX1cfDCGDQoJpDWzo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "47657586079-uo2rpfv7lrbjnianh7jojonne3fqcgbi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
